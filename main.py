@@ -9,6 +9,7 @@ from flask_limiter.util import get_remote_address
 import optimizer
 import ai_insights
 import quantum_optimizer
+import quantum_playground
 import openai_insights
 import file_parser
 import config
@@ -66,6 +67,7 @@ else:
 # Initialize our optimizers and insight generators
 quantum_opt = quantum_optimizer.QuantumWorkflowOptimizer(use_quantum=use_quantum, ibm_token=ibm_token)
 openai_gen = openai_insights.OpenAIInsightsGenerator(api_key=openai_key)
+quantum_playground_instance = quantum_playground.QuantumPlayground(use_real_quantum=use_quantum, ibm_token=ibm_token)
 
 @app.route('/')
 def index():
@@ -237,6 +239,81 @@ def _validate_input(data):
     except Exception as e:
         logging.error(f"Validation error: {str(e)}")
         return False
+
+@app.route('/quantum-playground')
+def quantum_playground_page():
+    """Render the quantum playground page"""
+    # Get available backends
+    backends = quantum_playground_instance.get_available_backends()
+    return render_template('quantum_playground.html', backends=backends)
+
+@app.route('/quantum/create-circuit', methods=['POST'])
+def create_quantum_circuit():
+    """Create a quantum circuit based on the specified parameters"""
+    try:
+        # Get input data from request
+        data = request.json
+        num_qubits = data.get('num_qubits', 2)
+        circuit_type = data.get('circuit_type', 'empty')
+        
+        # Validate input
+        if not isinstance(num_qubits, int) or num_qubits < 1 or num_qubits > 12:
+            return jsonify({'success': False, 'error': 'Invalid number of qubits'}), 400
+            
+        # Create the circuit
+        result = quantum_playground_instance.create_circuit(num_qubits, circuit_type)
+        
+        if not result.get('success', False):
+            logger.error(f"Circuit creation error: {result.get('error', 'Unknown error')}")
+            return jsonify(result), 400
+            
+        logger.info(f"Successfully created {circuit_type} circuit with {num_qubits} qubits")
+        return jsonify(result)
+        
+    except Exception as e:
+        logger.error(f"Error creating quantum circuit: {str(e)}")
+        return jsonify({'success': False, 'error': f'Circuit creation failed: {str(e)}'}), 500
+
+@app.route('/quantum/run-circuit', methods=['POST'])
+def run_quantum_circuit():
+    """Run a quantum circuit simulation"""
+    try:
+        # Get input data from request
+        data = request.json
+        circuit = data.get('circuit')
+        backend = data.get('backend', 'qasm_simulator')
+        shots = data.get('shots', 1024)
+        
+        # Validate input
+        if not circuit:
+            return jsonify({'success': False, 'error': 'No circuit provided'}), 400
+            
+        if not isinstance(shots, int) or shots < 1 or shots > 10000:
+            return jsonify({'success': False, 'error': 'Shots must be between 1 and 10,000'}), 400
+            
+        # Run the circuit
+        result = quantum_playground_instance.run_circuit(circuit, backend, shots)
+        
+        if not result.get('success', False):
+            logger.error(f"Circuit simulation error: {result.get('error', 'Unknown error')}")
+            return jsonify(result), 400
+            
+        logger.info(f"Successfully ran circuit simulation on {backend} with {shots} shots")
+        return jsonify(result)
+        
+    except Exception as e:
+        logger.error(f"Error running quantum circuit: {str(e)}")
+        return jsonify({'success': False, 'error': f'Circuit simulation failed: {str(e)}'}), 500
+
+@app.route('/quantum/backends', methods=['GET'])
+def get_quantum_backends():
+    """Get a list of available quantum backends"""
+    try:
+        backends = quantum_playground_instance.get_available_backends()
+        return jsonify({'success': True, 'backends': backends})
+    except Exception as e:
+        logger.error(f"Error getting quantum backends: {str(e)}")
+        return jsonify({'success': False, 'error': f'Failed to get backends: {str(e)}'}), 500
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)

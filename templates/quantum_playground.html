@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quantum Algorithm Playground</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <!-- Add Chart.js for visualization -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <header>
+        <h1>Quantum Algorithm Playground</h1>
+        <nav>
+            <a href="{{ url_for('index') }}">Home</a>
+            <a href="{{ url_for('quantum_playground') }}" class="active">Quantum Playground</a>
+            <a href="{{ url_for('data_format') }}">Data Format</a>
+        </nav>
+    </header>
+
+    <main>
+        <section class="playground-container">
+            <div class="playground-controls">
+                <h2>Quantum Circuit Builder</h2>
+                
+                <div class="control-group">
+                    <label for="num-qubits">Number of Qubits:</label>
+                    <input type="number" id="num-qubits" min="1" max="12" value="3">
+                </div>
+                
+                <div class="control-group">
+                    <label for="circuit-type">Circuit Type:</label>
+                    <select id="circuit-type">
+                        <option value="empty">Empty Circuit</option>
+                        <option value="bell">Bell State</option>
+                        <option value="ghz">GHZ State</option>
+                        <option value="qft">Quantum Fourier Transform</option>
+                        <option value="random">Random Circuit</option>
+                    </select>
+                </div>
+                
+                <button id="create-circuit" class="primary-button">Create Circuit</button>
+                
+                <div class="status-message" id="circuit-status"></div>
+                
+                <div class="backend-selection">
+                    <h3>Simulation Settings</h3>
+                    
+                    <div class="control-group">
+                        <label for="backend-select">Backend:</label>
+                        <select id="backend-select">
+                            <option value="qasm_simulator">QASM Simulator</option>
+                            <option value="statevector_simulator">Statevector Simulator</option>
+                            {% for backend in backends %}
+                                {% if backend not in ['qasm_simulator', 'statevector_simulator'] %}
+                                    <option value="{{ backend }}">{{ backend }}</option>
+                                {% endif %}
+                            {% endfor %}
+                        </select>
+                    </div>
+                    
+                    <div class="control-group">
+                        <label for="shots">Shots:</label>
+                        <input type="number" id="shots" min="1" max="10000" value="1024">
+                    </div>
+                    
+                    <button id="run-circuit" class="secondary-button" disabled>Run Circuit</button>
+                </div>
+            </div>
+            
+            <div class="playground-visualization">
+                <div class="circuit-display">
+                    <h3>Circuit Diagram</h3>
+                    <pre id="circuit-diagram" class="circuit-code"></pre>
+                </div>
+                
+                <div class="results-container hidden" id="results-container">
+                    <h3>Simulation Results</h3>
+                    
+                    <div class="results-summary" id="results-summary"></div>
+                    
+                    <div class="chart-container">
+                        <canvas id="results-chart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section class="playground-explanation">
+            <h2>About Quantum Computing</h2>
+            
+            <div class="explanation-cards">
+                <div class="explanation-card">
+                    <h3>Bell State</h3>
+                    <p>
+                        The Bell state is a maximally entangled quantum state of two qubits. After measuring one qubit, 
+                        the state of the other qubit is instantly determined, regardless of the distance between them.
+                    </p>
+                    <div class="card-formula">|Φ<sup>+</sup>⟩ = (|00⟩ + |11⟩)/√2</div>
+                </div>
+                
+                <div class="explanation-card">
+                    <h3>GHZ State</h3>
+                    <p>
+                        The Greenberger-Horne-Zeilinger (GHZ) state is a multi-qubit entangled state that 
+                        demonstrates non-classical correlations between three or more qubits.
+                    </p>
+                    <div class="card-formula">|GHZ⟩ = (|00...0⟩ + |11...1⟩)/√2</div>
+                </div>
+                
+                <div class="explanation-card">
+                    <h3>Quantum Fourier Transform</h3>
+                    <p>
+                        The Quantum Fourier Transform (QFT) is a quantum version of the discrete Fourier transform, 
+                        a key component in many quantum algorithms including Shor's factoring algorithm.
+                    </p>
+                    <div class="card-formula">|j⟩ → (1/√N) Σ<sub>k=0</sub><sup>N-1</sup> e<sup>2πijk/N</sup>|k⟩</div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>Quantum Algorithm Playground - Enterprise Quantum Computing Application</p>
+    </footer>
+
+    <!-- JavaScript for the playground functionality -->
+    <script src="{{ url_for('static', filename='js/quantum-playground.js') }}"></script>
+</body>
+</html>
