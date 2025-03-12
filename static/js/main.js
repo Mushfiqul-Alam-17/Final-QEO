@@ -501,19 +501,18 @@ function displayResults(result, formData) {
     // Annual savings calculation (based on 50 similar projects)
     const perProjectSavings = originalBudget * (costSavings / 100);
     const annualSavings = perProjectSavings * 50;
-    document.getElementById('annual-savings').textContent = `$${numberWithCommas(Math.round(annualSavings))}`;
+    document.getElementById('annual-savings').textContent = "$" + numberWithCommas(Math.round(annualSavings));
     
     // Time to ROI (break-even point in months)
     // Assuming implementation cost is roughly 3x the optimized budget
     const implementationCost = result.total_cost * 3;
     const timeToROI = Math.max(1, Math.ceil((implementationCost / annualSavings) * 12));
-    document.getElementById('time-to-roi').textContent = `${timeToROI} mo`;
+    document.getElementById('time-to-roi').textContent = timeToROI + " mo";
     
     // 5-year impact calculation with efficiency factor
     const fiveYearSavings = annualSavings * 5 * (1 + (timeEfficiency / 200));
     const fiveYearImpactInMillions = fiveYearSavings / 1000000;
-    document.getElementById('five-year-impact').textContent = 
-        `$${fiveYearImpactInMillions.toFixed(1)}M`;
+    document.getElementById('five-year-impact').textContent = "$" + fiveYearImpactInMillions.toFixed(1) + "M";
 }
 
 /**
