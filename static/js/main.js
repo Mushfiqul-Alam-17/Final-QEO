@@ -489,6 +489,31 @@ function displayResults(result, formData) {
     });
     const avgSkillMatch = Math.round(totalSkillMatch / result.assignments.length);
     document.getElementById('skill-match').textContent = (avgSkillMatch > 0 ? avgSkillMatch : 85) + '%';
+    
+    // Calculate ROI metrics for Infosys enterprise view
+    const originalBudget = formData.budget;
+    
+    // Helper function for formatting numbers with commas
+    function numberWithCommas(x) {
+        return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
+    
+    // Annual savings calculation (based on 50 similar projects)
+    const perProjectSavings = originalBudget * (costSavings / 100);
+    const annualSavings = perProjectSavings * 50;
+    document.getElementById('annual-savings').textContent = `$${numberWithCommas(Math.round(annualSavings))}`;
+    
+    // Time to ROI (break-even point in months)
+    // Assuming implementation cost is roughly 3x the optimized budget
+    const implementationCost = result.total_cost * 3;
+    const timeToROI = Math.max(1, Math.ceil((implementationCost / annualSavings) * 12));
+    document.getElementById('time-to-roi').textContent = `${timeToROI} mo`;
+    
+    // 5-year impact calculation with efficiency factor
+    const fiveYearSavings = annualSavings * 5 * (1 + (timeEfficiency / 200));
+    const fiveYearImpactInMillions = fiveYearSavings / 1000000;
+    document.getElementById('five-year-impact').textContent = 
+        `$${fiveYearImpactInMillions.toFixed(1)}M`;
 }
 
 /**
@@ -623,7 +648,7 @@ function loadOptimizationFromHistory(historyEntry) {
                 </div>
                 <div class="form-group">
                     <label>Skills (comma separated)</label>
-                    <input type="text" class="dev-skills" value="${Array.isArray(dev.skills) ? dev.skills.join : ""(', ')}" placeholder="Python, UI, Database">
+                    <input type="text" class="dev-skills" value="${Array.isArray(dev.skills) ? dev.skills.join(', ')}" placeholder="Python, UI, Database">
                 </div>
                 <button type="button" class="remove-btn" title="Remove"><i data-feather="x-circle"></i></button>
             </div>
@@ -809,7 +834,7 @@ function fillFormWithImportedData(data) {
                 </div>
                 <div class="form-group">
                     <label>Skills (comma separated)</label>
-                    <input type="text" class="dev-skills" value="${Array.isArray(dev.skills) ? dev.skills.join : ""(', ')}" placeholder="Python, UI, Database">
+                    <input type="text" class="dev-skills" value="${Array.isArray(dev.skills) ? dev.skills.join(', ')}" placeholder="Python, UI, Database">
                 </div>
                 <button type="button" class="remove-btn" title="Remove"><i data-feather="x-circle"></i></button>
             </div>
