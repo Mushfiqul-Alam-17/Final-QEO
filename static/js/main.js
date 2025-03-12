@@ -426,6 +426,34 @@ function displayResults(result, formData) {
         });
     }
 
+    // Update quantum visualization
+    if (typeof animateQuantumProcess === 'function') {
+        try {
+            animateQuantumProcess(result);
+        } catch (e) {
+            console.error('Error in quantum visualization:', e);
+        }
+    }
+    
+    // Update the UI badges for technology
+    const quantumBadge = document.getElementById('quantum-badge');
+    const aiBadge = document.getElementById('ai-badge');
+    
+    if (quantumBadge) {
+        quantumBadge.innerHTML = result.quantum_powered ? 
+            '<i data-feather="box"></i> IBM Qiskit Powered' : 
+            '<i data-feather="cpu"></i> Quantum-Inspired';
+    }
+    
+    if (aiBadge) {
+        aiBadge.innerHTML = '<i data-feather="cpu"></i> OpenAI Enhanced';
+    }
+    
+    // Refresh Feather icons
+    if (typeof feather !== 'undefined') {
+        feather.replace();
+    }
+    
     // Update charts
     updateCharts(result);
 
