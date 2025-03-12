@@ -1,3 +1,4 @@
+# bunny
 """
 Quantum-powered optimizer using IBM Qiskit for AQWSE
 """
