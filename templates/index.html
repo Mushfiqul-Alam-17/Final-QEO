@@ -338,7 +338,7 @@
         </div>
     </footer>
 
-    <script src="{{ url_for('static', filename='js/quantum-visualization-fixed.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/quantum-visualization.js') }}"></script>
     <script src="{{ url_for('static', filename='js/charts.js') }}"></script>
     <script src="{{ url_for('static', filename='js/main.js') }}"></script>
     <script>
@@ -375,7 +375,7 @@
             
             // Also initialize on window resize
             window.addEventListener('resize', function() {
-                if (resultsSection.style.display !== 'none' && typeof initQuantumVisualization === 'function') {
+                if (resultsSection.style.display !== 'none') {
                     initQuantumVisualization();
                 }
             });
