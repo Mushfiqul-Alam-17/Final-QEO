@@ -9,10 +9,13 @@ function initQuantumVisualization() {
     if (!document.getElementById('quantum-canvas')) {
         const container = document.getElementById('quantum-visualization');
         if (container) {
+            // Force clear any previous content
+            container.innerHTML = '';
+            
             const canvas = document.createElement('canvas');
             canvas.id = 'quantum-canvas';
-            canvas.width = container.offsetWidth;
-            canvas.height = 200; // Reduced height
+            canvas.width = container.clientWidth || 600; // Fallback width if container has no width
+            canvas.height = 200; // Fixed height
             container.appendChild(canvas);
             
             // Add description
@@ -24,6 +27,10 @@ function initQuantumVisualization() {
                 and find the optimal resource allocation.</p>
             `;
             container.appendChild(description);
+            
+            console.log("Quantum canvas initialized with width:", canvas.width, "height:", canvas.height);
+        } else {
+            console.error("Quantum visualization container not found");
         }
     }
 }
