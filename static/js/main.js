@@ -1097,19 +1097,4 @@ function fillSampleData() {
  * Update charts with new data
  * This function is now implemented in charts.js
  */
-function updateCharts(result) {
-    // Check if results section is visible before updating charts
-    if (document.getElementById('results-section').style.display !== 'none') {
-        // Update cost chart
-        const costCtx = document.getElementById('costChart').getContext('2d');
-        new Chart(costCtx, {
-            // Chart configuration
-        });
-
-        // Update time chart
-        const timeCtx = document.getElementById('timeChart').getContext('2d');
-        new Chart(timeCtx, {
-            // Chart configuration
-        });
-    }
-}
+// The updateCharts function is defined in charts.js
