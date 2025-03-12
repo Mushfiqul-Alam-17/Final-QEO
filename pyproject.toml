@@ -17,4 +17,5 @@ dependencies = [
     "psycopg2-binary>=2.9.10",
     "qiskit>=1.4.1",
     "flask-limiter>=3.11.0",
+    "requests>=2.32.3",
 ]
