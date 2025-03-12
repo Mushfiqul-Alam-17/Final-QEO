@@ -15,6 +15,11 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Initialize the interface
     updateCircuitStatus('Ready to create a quantum circuit');
+    
+    // Initialize feather icons
+    if (typeof feather !== 'undefined') {
+        feather.replace();
+    }
 });
 
 /**

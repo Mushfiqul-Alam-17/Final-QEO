@@ -11,11 +11,16 @@
     <header>
         <div class="container">
             <div class="brand-wrapper">
-                <h1><span class="highlight">A</span>Q<span class="highlight">W</span>S<span class="highlight">E</span></h1>
+                <h1><span class="highlight">Q</span>E<span class="highlight">O</span></h1>
                 <h2>Infosys Cloud & Workforce Optimizer</h2>
                 <div class="powered-by">Powered by Quantum-AI Hybrid Technology</div>
             </div>
         </div>
+        <nav>
+            <a href="{{ url_for('index') }}">Home</a>
+            <a href="{{ url_for('quantum_playground_page') }}">Quantum Playground</a>
+            <a href="{{ url_for('data_format') }}" class="active">Data Format</a>
+        </nav>
     </header>
 
     <main class="container">
