@@ -24,7 +24,10 @@ if ibm_token and (len(ibm_token) < 20 or ibm_token.startswith('Your IBM')):
     logger.warning("IBM Quantum token appears invalid - disabling quantum features")
     ibm_token = None
     
-if openai_key and (len(openai_key) < 20 or not openai_key.startswith(('sk-', 'org-'))):
+if not openai_key:
+    logger.warning("No OpenAI API key found - disabling OpenAI features")
+    openai_key = None
+elif not openai_key.startswith('sk-') or len(openai_key) < 40:
     logger.warning("OpenAI API key appears invalid - disabling OpenAI features")
     openai_key = None
 
