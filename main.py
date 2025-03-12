@@ -2,22 +2,39 @@ import json
 import os
 import logging
 from flask import Flask, request, render_template, jsonify
+from flask_cors import CORS
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
+
 import optimizer
 import ai_insights
 import quantum_optimizer
 import openai_insights
 import file_parser
+import config
 
-# Configure logging
-logging.basicConfig(level=logging.DEBUG)
+# Set up logging
+config.setup_logging()
 logger = logging.getLogger(__name__)
 
+# Initialize Flask app
 app = Flask(__name__)
 app.secret_key = os.environ.get("SESSION_SECRET", "qeo-development-key")
 
+# Enable CORS for security
+CORS(app, resources={r"/*": {"origins": "*"}})
+
+# Set up rate limiting
+limiter = Limiter(
+    get_remote_address,
+    app=app,
+    default_limits=["200 per day", "50 per hour"],
+    storage_uri="memory://"
+)
+
 # Initialize quantum optimizer and OpenAI insights generator
-ibm_token = os.environ.get("IBM_QUANTUM_TOKEN")
-openai_key = os.environ.get("OPENAI_API_KEY")
+ibm_token = config.IBM_QUANTUM_TOKEN
+openai_key = config.OPENAI_API_KEY
 
 # Validate API keys (basic validation)
 if ibm_token and (len(ibm_token) < 20 or ibm_token.startswith('Your IBM')):
