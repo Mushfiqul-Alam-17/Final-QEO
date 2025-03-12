@@ -234,7 +234,7 @@
                 </div>
                 
                 <div class="infosys-benefits">
-                    <h4><i data-feather="bar-chart-2"></i> Enterprise Benefits <span class="enterprise-tag">Infosys</span></h4>
+                    <h4><i data-feather="bar-chart-2"></i> Enterprise Benefits</h4>
                     <div class="benefits-grid">
                         <div class="benefit-card">
                             <div class="benefit-icon"><i data-feather="dollar-sign"></i></div>
@@ -253,49 +253,6 @@
                             <div class="benefit-title">Skills Utilization</div>
                             <div class="benefit-value" id="skill-match">0%</div>
                             <div class="benefit-desc">Optimal talent deployment</div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="roi-calculator">
-                    <h4><i data-feather="trending-up"></i> Enterprise ROI Calculator</h4>
-                    <div class="roi-metrics">
-                        <div class="roi-metric">
-                            <div class="roi-metric-label">Annual Savings</div>
-                            <div class="roi-metric-value" id="annual-savings">$0</div>
-                            <div class="roi-metric-subtext">Based on 50 similar projects</div>
-                        </div>
-                        <div class="roi-metric">
-                            <div class="roi-metric-label">Time to ROI</div>
-                            <div class="roi-metric-value" id="time-to-roi">0 mo</div>
-                            <div class="roi-metric-subtext">Break-even point</div>
-                        </div>
-                        <div class="roi-metric">
-                            <div class="roi-metric-label">5-Year Impact</div>
-                            <div class="roi-metric-value" id="five-year-impact">$0M</div>
-                            <div class="roi-metric-subtext">Projected total savings</div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="future-upgrades">
-                    <h4><i data-feather="shield"></i> Infosys Enterprise Upgrade Path</h4>
-                    <p class="mb-3">This platform can be extended with these Infosys-specific upgrades:</p>
-                    <div class="upgrade-options">
-                        <div class="upgrade-option">
-                            <h5><i data-feather="cpu"></i> Real Quantum Hardware</h5>
-                            <p class="upgrade-description">Upgrade to use actual IBM quantum computers for processing instead of simulation.</p>
-                            <span class="upgrade-tag">25-40% Performance Gain</span>
-                        </div>
-                        <div class="upgrade-option">
-                            <h5><i data-feather="globe"></i> Infosys Private LLM</h5>
-                            <p class="upgrade-description">Integrate with Infosys' proprietary large language models for more secure, domain-specific insights.</p>
-                            <span class="upgrade-tag">Enterprise Security</span>
-                        </div>
-                        <div class="upgrade-option">
-                            <h5><i data-feather="users"></i> HR System Integration</h5>
-                            <p class="upgrade-description">Connect directly with Infosys HR systems for accurate skill profiles and real-time availability.</p>
-                            <span class="upgrade-tag">Automated Staffing</span>
                         </div>
                     </div>
                 </div>
@@ -338,21 +295,13 @@
         </div>
     </footer>
 
-    <script src="{{ url_for('static', filename='js/quantum-visualization.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/charts.js') }}"></script>
     <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/charts.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/quantum-visualization.js') }}"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             feather.replace();
-            
-            // Make sure all scripts are loaded before initializing visualization
-            setTimeout(function() {
-                if (typeof initQuantumVisualization === 'function') {
-                    initQuantumVisualization();
-                } else {
-                    console.error('Quantum visualization not available');
-                }
-            }, 200);
+            initQuantumVisualization();
             
             // Initialize visualization when results section is displayed
             const resultsSection = document.getElementById('results-section');
@@ -361,11 +310,7 @@
                     if (mutation.attributeName === 'style' && 
                         resultsSection.style.display !== 'none') {
                         // Results are now visible, ensure visualization is initialized
-                        if (typeof initQuantumVisualization === 'function') {
-                            initQuantumVisualization();
-                        } else {
-                            console.error('Quantum visualization not available');
-                        }
+                        initQuantumVisualization();
                     }
                 });
             });
