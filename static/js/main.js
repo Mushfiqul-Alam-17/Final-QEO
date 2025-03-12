@@ -426,13 +426,29 @@ function displayResults(result, formData) {
         });
     }
 
-    // Update quantum visualization
-    if (typeof animateQuantumProcess === 'function') {
+    // Ensure quantum canvas is initialized and then update visualization
+    if (typeof initQuantumVisualization === 'function') {
         try {
-            animateQuantumProcess(result);
+            initQuantumVisualization();
+            
+            // Add a small delay to ensure the canvas is ready
+            setTimeout(() => {
+                if (typeof animateQuantumProcess === 'function') {
+                    try {
+                        console.log("Running quantum visualization animation...");
+                        animateQuantumProcess(result);
+                    } catch (e) {
+                        console.error('Error in quantum visualization animation:', e);
+                    }
+                } else {
+                    console.error('animateQuantumProcess function not found');
+                }
+            }, 100);
         } catch (e) {
-            console.error('Error in quantum visualization:', e);
+            console.error('Error initializing quantum visualization:', e);
         }
+    } else {
+        console.error('initQuantumVisualization function not found');
     }
     
     // Update the UI badges for technology

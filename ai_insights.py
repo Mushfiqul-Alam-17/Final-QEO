@@ -10,8 +10,8 @@ def generate_insights(data: Dict[str, Any], optimization_result: Dict[str, Any])
     """
     Generate AI-powered insights and explanations for the optimization results.
     
-    In a real implementation, this would connect to an actual AI service like Grok.
-    For this prototype, we generate deterministic insights based on the optimization data.
+    This is the fallback implementation when OpenAI integration is not available.
+    Generates deterministic insights based on the optimization data.
     
     Args:
         data: Original input data
@@ -20,6 +20,10 @@ def generate_insights(data: Dict[str, Any], optimization_result: Dict[str, Any])
     Returns:
         Dictionary with insights and explanations
     """
+    # Log that we're using the fallback implementation
+    import logging
+    logger = logging.getLogger(__name__)
+    logger.info("Using deterministic fallback insights generation")
     try:
         logger.info("Generating AI insights for optimization results")
         

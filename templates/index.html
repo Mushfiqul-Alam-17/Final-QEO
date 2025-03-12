@@ -302,6 +302,28 @@
         document.addEventListener('DOMContentLoaded', function() {
             feather.replace();
             initQuantumVisualization();
+            
+            // Initialize visualization when results section is displayed
+            const resultsSection = document.getElementById('results-section');
+            const observer = new MutationObserver(function(mutations) {
+                mutations.forEach(function(mutation) {
+                    if (mutation.attributeName === 'style' && 
+                        resultsSection.style.display !== 'none') {
+                        // Results are now visible, ensure visualization is initialized
+                        initQuantumVisualization();
+                    }
+                });
+            });
+            
+            // Start observing for display changes
+            observer.observe(resultsSection, { attributes: true });
+            
+            // Also initialize on window resize
+            window.addEventListener('resize', function() {
+                if (resultsSection.style.display !== 'none') {
+                    initQuantumVisualization();
+                }
+            });
         });
     </script>
 </body>
