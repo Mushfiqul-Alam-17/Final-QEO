@@ -27,8 +27,9 @@ if ibm_token and (len(ibm_token) < 20 or ibm_token.startswith('Your IBM')):
 if not openai_key:
     logger.warning("No OpenAI API key found - disabling OpenAI features")
     openai_key = None
-elif not openai_key.startswith('sk-') or len(openai_key) < 40:
-    logger.warning("OpenAI API key appears invalid - disabling OpenAI features")
+# We'll accept any non-empty key that's at least 32 characters
+elif len(openai_key) < 32:
+    logger.warning("OpenAI API key appears too short - disabling OpenAI features")
     openai_key = None
 
 # Track if we're using quantum computing and/or OpenAI
