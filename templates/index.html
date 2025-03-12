@@ -338,13 +338,21 @@
         </div>
     </footer>
 
-    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/charts.js') }}"></script>
     <script src="{{ url_for('static', filename='js/quantum-visualization.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/charts.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             feather.replace();
-            initQuantumVisualization();
+            
+            // Make sure all scripts are loaded before initializing visualization
+            setTimeout(function() {
+                if (typeof initQuantumVisualization === 'function') {
+                    initQuantumVisualization();
+                } else {
+                    console.error('Quantum visualization not available');
+                }
+            }, 200);
             
             // Initialize visualization when results section is displayed
             const resultsSection = document.getElementById('results-section');
@@ -353,7 +361,11 @@
                     if (mutation.attributeName === 'style' && 
                         resultsSection.style.display !== 'none') {
                         // Results are now visible, ensure visualization is initialized
-                        initQuantumVisualization();
+                        if (typeof initQuantumVisualization === 'function') {
+                            initQuantumVisualization();
+                        } else {
+                            console.error('Quantum visualization not available');
+                        }
                     }
                 });
             });
